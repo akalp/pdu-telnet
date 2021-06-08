@@ -26,11 +26,11 @@ export async function getStaticProps() {
   const statuses = ["on", "off", "pending"]
 
   const racks = jsyaml.load(fs.readFileSync('pdus.yaml', 'utf-8'));
-  racks.racks.forEach(rack => {
+  racks.forEach(rack => {
     rack.outlets.forEach(outlet => {
       const random = Math.floor(Math.random() * statuses.length);
       outlet.status = statuses[random];
     })
   });
-  return { props: { racks: racks.racks } }
+  return { props: { racks: racks } }
 }
