@@ -1,8 +1,8 @@
 import Outlet from './outlet'
 
-export default function Rack({ rack, idx_rack }) {
+export default function Rack({ rack }) {
   return (
-    <div key={'r' + idx_rack} className="col-xl-3 col-md-6 col-sm-12 p-4">
+    <div className="col-xl-3 col-md-6 col-sm-12 p-4">
       <h3>{rack.name}</h3>
       <h6>{rack.ip}</h6>
       <table className="table table-sm table-hover align-middle text-center">
@@ -14,8 +14,8 @@ export default function Rack({ rack, idx_rack }) {
           </tr>
         </thead>
         <tbody>
-          {rack.outlets.map((outlet, idx_outlet) =>
-            (<Outlet outlet={outlet} idx_outlet={idx_outlet} idx_rack={idx_rack} rack_ip={rack.ip} />)
+          {rack.outlets.map(outlet =>
+            (<Outlet key={'r' + rack.id + 'o' + outlet.id} rack={rack} outlet={outlet} />)
           )}
         </tbody>
       </table>

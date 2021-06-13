@@ -1,23 +1,25 @@
 import { useState } from 'react'
+import { get_outlet_status, set_outlet_status } from '../api/py_runner'
 
-export default function Outlet({ outlet, idx_outlet, idx_rack, rack_ip }) {
+export default function Outlet({ outlet, rack }) {
   const [status, setStatus] = useState(outlet.status)
 
   function telnetCall() {
     const old = status
     setStatus('pending');
-    setTimeout(() => { setStatus(old === 'on' ? 'off' : 'on') }, 2000)
+    set_outlet_status(rack.ip, outlet.id, old === 'on' ? 'off' : 'on')
+    setTimeout(() => { setStatus(get_outlet_status(rack.ip, outlet.id)) }, 1000)
   }
 
   return (
-    <tr key={'r' + idx_rack + 'o' + idx_outlet} className={status === 'on' ? 'bg-success' : status === 'pending' ? 'bg-warning' : 'bg-body'} onClick={telnetCall} style={{ cursor: 'pointer' }}>
-      <td>{idx_outlet}</td>
+    <tr className={status === 'on' ? 'bg-success' : status === 'pending' ? 'bg-warning' : 'bg-body'} onClick={telnetCall} style={{ cursor: 'pointer' }}>
+      <td>{outlet.id}</td>
       <td>{outlet.name ? outlet.name : '-'}</td>
       <td>
         <ul className="list-unstyled">
           {outlet.boards.map((board, idx_board) =>
           (
-            <li key={'r' + idx_rack + 'o' + idx_outlet + 'b' + idx_board}>{board}</li>
+            <li key={'r' + rack.id + 'o' + outlet.id + 'b' + idx_board}>{board}</li>
           )
           )}
         </ul>
